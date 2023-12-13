@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>FINALS ROBOTICS</title>
+  </head>
+
+  <body>
+    <div class="container mt-3">
+      <div class="justify-content-around text-center">
+        <h1 class="text-light">FINALS ROBOTICS</h1>
+
+        <div class="row justify-content-between mt-3">
+          <h3 class="text-light">Actuator</h3>
+          <div class="col-4">
+            <button
+              type="button"
+              class="btn btn-lg btn-light text-warning mx-1 fs-5 w-75"
+              onclick="updateActuator('FORWARD')"
+            >
+              FORWARD
+            </button>
+          </div>
+          <div class="col-4">
+            <button
+              type="button"
+              class="btn btn-lg btn-light text-danger mx-1 fs-5 w-75"
+              onclick="updateActuator('STOP')"
+            >
+              STOP
+            </button>
+          </div>
+          <div class="col-4">
+            <button
+              type="button"
+              class="btn btn-lg btn-light text-info mx-1 fs-5 w-75"
+              onclick="updateActuator('BACKWARD')"
+            >
+              BACKWARD
+            </button>
+          </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+          <h3 class="text-light">Claw</h3>
+          <div class="col-6">
+            <button
+              type="button"
+              class="btn btn-lg btn-light text-success mx-1 fs-5 w-50"
+              onclick="updateClaw('GRAB')"
+            >
+              GRAB
+            </button>
+          </div>
+          <div class="col-6">
+            <button
+              type="button"
+              class="btn btn-lg btn-light text-danger mx-1 fs-5 w-50"
+              onclick="updateClaw('RELEASE')"
+            >
+              RELEASE
+            </button>
+          </div>
+        </div>
+        <div class="row justify-content-center joysticks">
+          <div class="col-5 p-5">
+            <div id="joystick-container">
+              <img src="./images/joystick-base.png" width="140px" />
+              <div id="stick1">
+                <img src="./images/joystick-green.png" />
+              </div>
+            </div>
+          </div>
+          <div class="col-5 p-5">
+            <div id="joystick-container">
+              <img src="./images/joystick-base.png" width="140px" />
+              <div id="stick2">
+                <img src="./images/joystick-blue.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      class JoystickController {
+        // stickID: ID of HTML element (representing joystick) that will be dragged
+        // maxDistance: maximum amount joystick can move in any direction
+        // deadzone: joystick must move at least this amount from origin to register value change
+        constructor(stickID, maxDistance, deadzone) {
+          this.id = stickID;
+          let stick = document.getElementById(stickID);
+
+          // location from which drag begins, used to calculate offsets
+          this.dragStart = null;
+
+          // track touch identifier in case multiple joysticks present
+          this.touchId = null;
+
+          this.active = false;
+          this.value = { x: 0, y: 0 };
+
+          let self = this;
+
+          function handleDown(event) {
+            self.active = true;
+
+            // all drag movements are instantaneous
+            stick.style.transition = "0s";
+
+            // touch event fired before mouse event; prevent redundant mouse event from firing
+            event.preventDefault();
+
+            if (event.changedTouches)
+              self.dragStart = {
+                x: event.changedTouches[0].clientX,
+                y: event.changedTouches[0].clientY,
+              };
+            else self.dragStart = { x: event.clientX, y: event.clientY };
+
+            // if this is a touch event, keep track of which one
+            if (event.changedTouches)
+              self.touchId = event.changedTouches[0].identifier;
+          }
+
+          function handleMove(event) {
+            if (!self.active) return;
+
+            // if this is a touch event, make sure it is the right one
+            // also handle multiple simultaneous touchmove events
+            let touchmoveId = null;
+            if (event.changedTouches) {
+              for (let i = 0; i < event.changedTouches.length; i++) {
+                if (self.touchId == event.changedTouches[i].identifier) {
+                  touchmoveId = i;
+                  event.clientX = event.changedTouches[i].clientX;
+                  event.clientY = event.changedTouches[i].clientY;
+                }
+              }
+
+              if (touchmoveId == null) return;
+            }
+
+            const xDiff = event.clientX - self.dragStart.x;
+            const yDiff = event.clientY - self.dragStart.y;
+            const angle = Math.atan2(yDiff, xDiff);
+            const distance = Math.min(maxDistance, Math.hypot(xDiff, yDiff));
+            const xPosition = distance * Math.cos(angle);
+            const yPosition = distance * Math.sin(angle);
+
+            // move stick image to new position
+            stick.style.transform = `translate3d(${xPosition}px, ${yPosition}px, 0px)`;
+
+            // deadzone adjustment
+            const distance2 =
+              distance < deadzone
+                ? 0
+                : (maxDistance / (maxDistance - deadzone)) *
+                  (distance - deadzone);
+            const xPosition2 = distance2 * Math.cos(angle);
+            const yPosition2 = distance2 * Math.sin(angle);
+            const xPercent = parseFloat((xPosition2 / maxDistance).toFixed(4));
+            const yPercent = parseFloat((yPosition2 / maxDistance).toFixed(4));
+
+            self.value = { x: xPercent, y: yPercent };
+          }
+
+          function handleUp(event) {
+            if (!self.active) return;
+
+            // if this is a touch event, make sure it is the right one
+            if (
+              event.changedTouches &&
+              self.touchId != event.changedTouches[0].identifier
+            )
+              return;
+
+            // transition the joystick position back to center
+            stick.style.transition = ".2s";
+            stick.style.transform = `translate3d(0px, 0px, 0px)`;
+
+            // reset everything
+            self.value = { x: 0, y: 0 };
+            self.touchId = null;
+            self.active = false;
+          }
+
+          stick.addEventListener("mousedown", handleDown);
+          stick.addEventListener("touchstart", handleDown);
+          document.addEventListener("mousemove", handleMove, {
+            passive: false,
+          });
+          document.addEventListener("touchmove", handleMove, {
+            passive: false,
+          });
+          document.addEventListener("mouseup", handleUp);
+          document.addEventListener("touchend", handleUp);
+        }
+      }
+
+      let joystick1 = new JoystickController("stick1", 64, 8);
+      let joystick2 = new JoystickController("stick2", 64, 8);
+
+      function update() {
+        const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+        const clampAndScale = (val) => {
+          const scaled = val * -100;
+          return clamp(Math.round(scaled), -100, 100);
+        };
+
+        const joystick1X = clampAndScale(joystick1.value.x);
+        const joystick1Y = clampAndScale(joystick1.value.y);
+
+        const joystick2X = clampAndScale(joystick2.value.x);
+        const joystick2Y = clampAndScale(joystick2.value.y);
+
+        // Update Firebase
+        let joystick1XPos;
+        getjoystick1XValue()
+          .then((value) => {
+            // Do something with the retrieved value
+            joystick1XPos = value;
+
+            if (joystick1X <= -50 && joystick1XPos < 180) {
+              joystick1XPos = joystick1XPos + 1;
+              updateJoystick1X(joystick1XPos);
+            } else if (joystick1X >= 50 && joystick1XPos > 0) {
+              joystick1XPos = joystick1XPos - 1;
+              updateJoystick1X(joystick1XPos);
+            } else {
+              updateJoystick1X(joystick1XPos);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
+        let joystick1YPos;
+        getjoystick1YValue()
+          .then((value) => {
+            // Do something with the retrieved value
+            joystick1YPos = value;
+
+            if (joystick1Y <= -50 && joystick1YPos < 180) {
+              joystick1YPos = joystick1YPos + 1;
+              updateJoystick1Y(joystick1YPos);
+            } else if (joystick1Y >= 50 && joystick1YPos > 0) {
+              joystick1YPos = joystick1YPos - 1;
+              updateJoystick1Y(joystick1YPos) ;
+            } else {
+              updateJoystick1Y(joystick1YPos);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
+        let joystick2YPos;
+        getjoystick2YValue()
+          .then((value) => {
+            // Do something with the retrieved value
+            joystick2YPos = value;
+
+            if (joystick2Y <= -50 && joystick2YPos < 180) {
+              joystick2YPos = joystick2YPos + 1;
+              updateJoystick2Y(joystick2YPos);
+            } else if (joystick2Y >= 50 && joystick2YPos > 0) {
+              joystick2YPos = joystick2YPos - 1;
+              updateJoystick2Y(joystick2YPos);
+            } else {
+              updateJoystick2Y(joystick2YPos);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function loop() {
+        requestAnimationFrame(loop);
+        update();
+      }
+
+      loop();
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        onValue,
+      } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyB7tWVC7BW-RfgM0knAXVQ2noR5n6NPCqc",
+        authDomain: "roboticsfinals.firebaseapp.com",
+        databaseURL:
+          "https://roboticsfinals-default-rtdb.asia-southeast1.firebasedatabase.app/",
+        projectId: "roboticsfinals",
+        storageBucket: "roboticsfinals.appspot.com",
+        messagingSenderId: "123386676339",
+        appId: "1:123386676339:web:0c8836c6fb1941a2ee9606",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const actuatorRef = ref(database, "Actuator");
+      const clawRef = ref(database, "Claw");
+      const joystick1XRef = ref(database, "Joystick1X");
+      const joystick1YRef = ref(database, "Joystick1Y");
+      const joystick2YRef = ref(database, "Joystick2Y");
+
+      window.getjoystick1XValue = function () {
+        return new Promise((resolve, reject) => {
+          onValue(
+            joystick1XRef,
+            (snapshot) => {
+              if (snapshot.exists()) {
+                const value = snapshot.val();
+                resolve(value);
+              } else {
+                console.log("No data available");
+                resolve(null);
+              }
+            },
+            (error) => {
+              console.error(error);
+              reject(error);
+            }
+          );
+        });
+      };
+
+      window.getjoystick1YValue = function () {
+        return new Promise((resolve, reject) => {
+          onValue(
+            joystick1YRef,
+            (snapshot) => {
+              if (snapshot.exists()) {
+                const value = snapshot.val();
+                resolve(value);
+              } else {
+                console.log("No data available");
+                resolve(null);
+              }
+            },
+            (error) => {
+              console.error(error);
+              reject(error);
+            }
+          );
+        });
+      };
+
+      window.getjoystick2YValue = function () {
+        return new Promise((resolve, reject) => {
+          onValue(
+            joystick2YRef,
+            (snapshot) => {
+              if (snapshot.exists()) {
+                const value = snapshot.val();
+                resolve(value);
+              } else {
+                console.log("No data available");
+                resolve(null);
+              }
+            },
+            (error) => {
+              console.error(error);
+              reject(error);
+            }
+          );
+        });
+      };
+
+      window.updateActuator = function (value) {
+        set(actuatorRef, value, (error) => {
+          if (error) {
+            console.error("Error updating Actuator value:", error);
+          } else {
+            console.log("Actuator updated successfully");
+          }
+        });
+      };
+
+      window.updateClaw = function (value) {
+        set(clawRef, value, (error) => {
+          if (error) {
+            console.error("Error updating claw value:", error);
+          } else {
+            console.log("claw updated successfully");
+          }
+        });
+      };
+
+      window.updateJoystick1X = function (value) {
+        set(joystick1XRef, value, (error) => {
+          if (error) {
+            console.error("Error updating joystick1X value:", error);
+          } else {
+            console.log("joystick1X updated successfully");
+          }
+        });
+      };
+
+      window.updateJoystick1Y = function (value) {
+        set(joystick1YRef, value, (error) => {
+          if (error) {
+            console.error("Error updating joystick1Y value:", error);
+          } else {
+            console.log("joystick1Y updated successfully");
+          }
+        });
+      };
+
+      window.updateJoystick2Y = function (value) {
+        set(joystick2YRef, value, (error) => {
+          if (error) {
+            console.error("Error updating joystick2X value:", error);
+          } else {
+            console.log("joystick2X updated successfully");
+          }
+        });
+      };
+    </script>
+  </body>
+</html>

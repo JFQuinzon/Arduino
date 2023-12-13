@@ -1,0 +1,30 @@
+@font-face {
+  font-family: "transFont";
+  src: url("./font/SFTransRoboticsExtended.ttf") format("truetype");
+}
+
+body {
+  font-family: "transFont", sans-serif;
+  background-image: url("./images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: darken;
+  background-color: rgba(0, 0, 0, 0.206);
+}
+#joystick-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#stick2,
+#stick1 {
+  margin-left: -102px; 
+  margin-top: -2px;
+}
+
+.joysticks {
+  margin-left: -45px;
+}

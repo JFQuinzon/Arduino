@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LED Control</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-pzjw8f+ua7Kw1TIq0v8FqFjcJ6pajs/rfdfs3SO+kXf5V5c6Xamr5d+76P1p0z9g9"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Midterm Activity 1 NodeMCU</h1>
+      </header>
+      <section class="mt-5">
+        <img
+          src="https://i.postimg.cc/KjK1wL3c/bulb-off.png"
+          id="bulb"
+          width="150"
+        />
+        <div class="btn_container my-5">
+          <a
+            class="button"
+            href="#"
+            id="onButton"
+            style="--color: #6eff3e"
+            onclick="bulb_on()"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Turn On
+          </a>
+        </div>
+        <div class="btn_container my-5">
+          <a
+            class="button mx-5"
+            href="#"
+            id="offButton"
+            style="--color: #ff1867"
+            onclick="bulb_off()"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            Turn Off
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+      } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js"; // Import the database module
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCcng90uO9i-Sf7f1Z6QCk03beq1bobSSg",
+        authDomain: "midterm-activity-1-c5c44.firebaseapp.com",
+        databaseURL:
+          "https://midterm-activity-1-c5c44-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "midterm-activity-1-c5c44",
+        storageBucket: "midterm-activity-1-c5c44.appspot.com",
+        messagingSenderId: "187249822435",
+        appId: "1:187249822435:web:c73e9923fa75b2a33713d6",
+        measurementId: "G-W6DC5E254L",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      document
+        .getElementById("onButton")
+        .addEventListener("click", function () {
+          set(ref(database, "LED_STATUS"), 1)
+            .then(() => console.log("LED turned on successfully"))
+            .catch((error) => console.error("Error turning on LED:", error));
+        });
+
+      document
+        .getElementById("offButton")
+        .addEventListener("click", function () {
+          set(ref(database, "LED_STATUS"), 0)
+            .then(() => console.log("LED turned off successfully"))
+            .catch((error) => console.error("Error turning off LED:", error));
+        });
+    </script>
+    <script>
+      function bulb_on() {
+        document.getElementById("bulb").src =
+          "https://i.postimg.cc/6QyTynzr/bulb-on.png";
+      }
+      function bulb_off() {
+        document.getElementById("bulb").src =
+          "https://i.postimg.cc/KjK1wL3c/bulb-off.png";
+      }
+    </script>
+  </body>
+</html>

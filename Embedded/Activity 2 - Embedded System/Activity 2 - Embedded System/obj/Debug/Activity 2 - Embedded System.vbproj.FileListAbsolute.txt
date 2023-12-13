@@ -1,0 +1,23 @@
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.vbproj.AssemblyReference.cache
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity_2___Embedded_System.Form1.resources
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity_2___Embedded_System.Resources.resources
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.vbproj.GenerateResource.cache
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.vbproj.CoreCompileInputs.cache
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Activity 2 - Embedded System.exe.config
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Activity 2 - Embedded System.exe
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Activity 2 - Embedded System.pdb
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Activity 2 - Embedded System.xml
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.exe
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.xml
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.pdb
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Guna.UI.dll
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.vbproj.CopyComplete
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu.UI.WinForms.BunifuButton.dll
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu.UI.WinForms.BunifuButton.xml
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity_2___Embedded_System.Form2.resources
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu.UI.WinForms.BunifuLabel.dll
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu_UI_v1.5.3.dll
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu.Core.dll
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu.UI.WinForms.BunifuLabel.xml
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\bin\Debug\Bunifu_UI_v1.5.3.xml
+C:\JFrancisQ Files\Computer Engineering\4th Year\Embedded\Activity 2 - Embedded System\Activity 2 - Embedded System\obj\Debug\Activity 2 - Embedded System.exe.config
