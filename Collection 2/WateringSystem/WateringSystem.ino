@@ -123,7 +123,7 @@ void loop() {
   if (!optionSelected){
     handleButtons();
     handleNavigations();
-  }
+  } 
   else{
     if (chosenOption == 0){
       setTimerDuration();
