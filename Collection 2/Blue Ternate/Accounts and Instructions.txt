@@ -1,0 +1,31 @@
+Google Account 
+(DONT CHANGE ANYTHING, GINAGAMIT TO PARA MAKAPAG SEND NG EMAIL, hindi kailangan baguhin)
+email: vendoblueternate@gmail.com
+password: vendoblueternate_2023
+
+Website Password: Vendo123
+
+K E Y S
+* = Back
+# = Next / Menu / Save / Okay
+A = Set Expiration Date
+B = Set Date
+C = Set Time
+D = Manual Controll
+
+
+- Email Notification will be sent if the days remaining is in 10, 5, 3, 0
+- You can set the expiration from 0 - 9999
+- Email Accounts na pag sesendan ng mail is limmited to 3 accounts
+
+Setup Hotspot (Recommended: Laptop Hotspot)
+- need ng hotspot para dun comonnect yung device para mag ka internet
+- yung laptop dapat naka connect sa internet
+- Hotspot Name: Blue_Ternate_WIFI
+- Hotspot Password: Blue_Ternate_WIFI_2024
+
+
+Database used: Firebase
+Programming Language: JavaScript, HTML, CSS, C++
+
+Website Link: https://blueternatevendo.web.app/

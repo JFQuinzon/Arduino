@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login - Blue Ternate</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-7 col-lg-6">
+            <div class="wrap">
+              <div
+                class="img"
+                style="
+                  background-image: url(https://i0.wp.com/post.healthline.com/wp-content/uploads/2022/06/Clitoria-ternatea-blue-tea-1296x728-header.jpg?w=577&h=764);
+                "
+              ></div>
+              <div class="login-wrap p-4 p-md-5">
+                <div class="d-flex">
+                  <div class="w-100 text-center">
+                    <h1 class="mb-4 header-text">Blue Ternate Vendo</h1>
+                  </div>
+                </div>
+                <h2 id="passwordStatus" class="mb-4 text-center text-muted">
+                  Enter Password
+                </h2>
+
+                <!-- <div class="form-group mt-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="email"
+                      required
+                    />
+                    <label class="form-control-placeholder" for="username"
+                      >Email</label
+                    >
+                  </div> -->
+                <div class="form-group">  
+                  <input
+                    id="psw"
+                    type="password"
+                    class="form-control"
+                    required
+                  />
+                  <label class="form-control-placeholder" for="password"
+                    >Password</label
+                  >
+                  <span
+                    toggle="#psw"
+                    class="fa fa-fw fa-eye field-icon toggle-password"
+                  ></span>
+                </div>
+                <div class="form-group">
+                  <button
+                    type="submit"
+                    class="form-control btn btn-primary rounded submit px-3"
+                    id="loginUser"
+                  >
+                    Enter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Functionality -->
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        onValue,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDf5macbzeJ4rigrPyWB1VGjYNclur-SD8",
+        authDomain: "blueternatevendo.firebaseapp.com",
+        databaseURL:
+          "https://blueternatevendo-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "blueternatevendo",
+        storageBucket: "blueternatevendo.appspot.com",
+        messagingSenderId: "765814404316",
+        appId: "1:765814404316:web:b78b83307199b4b0833019",
+      };
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase();
+
+      // Functions
+      // LOGIN
+      loginUser.addEventListener("click", (e) => {
+        var enteredPassword = document.getElementById("psw").value;
+
+        // Check if the user is already logged in
+        if (sessionStorage.getItem("CheckLogin")) {
+          window.location.href = "./dashboard/dashboard.html";
+        }
+
+        const passwordStatus = document.getElementById("passwordStatus");
+        passwordStatus.textContent = "Loading";
+        passwordStatus.classList.remove("text-muted");
+        passwordStatus.classList.remove("text-danger");
+        passwordStatus.classList.add("text-warning");
+
+        setTimeout(() => {
+          const fetchedData = ref(database, "Password");
+          const remainingT = ref(database, "Expiration_Days");
+          let remainTime = 0;
+          onValue(remainingT, (snapshot) => {
+            remainTime = snapshot.val();
+          });
+          onValue(fetchedData, (snapshot) => {
+            const correctPassword = snapshot.val();
+            passwordStatus.textContent = "Enter Password";
+            passwordStatus.classList.remove("text-danger");
+            passwordStatus.classList.remove("text-warning");
+            passwordStatus.classList.add("text-muted");
+
+            if (correctPassword == enteredPassword) {
+              sessionStorage.setItem("CheckLogin", "True");
+              sessionStorage.setItem("TimeRemaining", remainTime);
+              window.location.href = "./dashboard/dashboard.html";
+            } else {
+              passwordStatus.textContent = "Wrong password!";
+              passwordStatus.classList.remove("text-muted");
+              passwordStatus.classList.remove("text-warning");
+              passwordStatus.classList.add("text-danger");
+            }
+          });
+        }, 200); // 500 milliseconds (0.5 seconds) delay
+      });
+
+      window.addEventListener("load", () => {
+        if (sessionStorage.getItem("CheckLogin")) {
+          window.location.href = "./dashboard/dashboard.html";
+        }
+      });
+    </script>
+  </body>
+</html>

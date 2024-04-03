@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dashboard - Blue Ternate</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="datetime/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./dash.css" />
+  </head>
+  <body>
+    <div class="container h-100">
+      <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-sm-8 col-md-10 col-lg-12 box py-5 px-5">
+          <button
+            type="button"
+            class="btn btn-light rounded-5 log_out"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            data-bs-title="Logout"
+            id="Logout"
+          >
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+          <h1 class="fw-bold fs-1 text-center header-text my-2">
+            Dashboard - Blue Ternate
+          </h1>
+          <div class="row justify-content-center mt-4">
+            <div class="col-sm-12 col-md-10 col-lg-7">
+              <h1 class="fw-bold fs-2 text-center">
+                Powder Expires in:
+                <span id="remaining_days" style="color: green"> 0 Days</span>
+              </h1>
+            </div>
+          </div>
+          <div class="row justify-content-center mt-4">
+            <div class="col-sm-12 col-md-10 col-lg-7 text-center">
+              <h1 class="fw-bold fs-2">
+                Vendo Status
+                <span
+                  id="vendo_status"
+                  class="p-1 px-2 rounded-3 bg-danger text-light"
+                  >Disabled</span
+                >
+              </h1>
+            </div>
+          </div>
+          <div class="row justify-content-center mt-4">
+            <div class="col-sm-12 col-md-10 col-lg-7">
+              <h1 class="fw-bold fs-2 text-center">Website Password</h1>
+              <form
+                class="row g-2 needs-validation text-center justify-content-center"
+                novalidate
+              >
+                <div class="col-md-7">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Current Password"
+                    id="currentPassword"
+                    required
+                  />
+                </div>
+                <div class="col-md-7">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="New Password"
+                    id="newPassword"
+                    required
+                  />
+                </div>
+                <div class="col-12">
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    id="btnChangePass"
+                  >
+                    Update Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row justify-content-center mt-4">
+            <div class="col-sm-12 col-md-10 col-lg-7">
+              <h1 class="fw-bold fs-2 text-center">Emails</h1>
+              <h1 class="fs-4 text-center hidden m-0" id="errorEmail">error</h1>
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Name"
+                  id="nameInput"
+                  required
+                />
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  id="emailInput"
+                  required
+                />
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="addEmail"
+                >
+                  Add
+                </button>
+              </div>
+              <div class="table-responsive table-container">
+                <table class="table table-hover" id="emailsTable">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Functionality -->
+
+    <script>
+      const signOutBtn = document.getElementById("Logout");
+      signOutBtn.addEventListener("click", () => {
+        sessionStorage.removeItem("CheckLogin");
+        sessionStorage.removeItem("TimeRemaining");
+        window.location.href = "../index.html";
+      });
+      window.addEventListener("load", () => {
+        if (!sessionStorage.getItem("CheckLogin")) {
+          window.location.href = "../index.html";
+        }
+      });
+
+      const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+      );
+      const tooltipList = [...tooltipTriggerList].map(
+        (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+      );
+    </script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        onValue,
+        push,
+        set,
+        onChildRemoved,
+        remove,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDf5macbzeJ4rigrPyWB1VGjYNclur-SD8",
+        authDomain: "blueternatevendo.firebaseapp.com",
+        databaseURL:
+          "https://blueternatevendo-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "blueternatevendo",
+        storageBucket: "blueternatevendo.appspot.com",
+        messagingSenderId: "765814404316",
+        appId: "1:765814404316:web:b78b83307199b4b0833019",
+      };
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
+
+      // Fetch Remaining Days
+      const expirationDays = ref(db, "Expiration_Days");
+      let remainingdays = document.getElementById("remaining_days");
+      onValue(expirationDays, (snapshot) => {
+        const data = snapshot.val();
+        remainingdays.innerHTML = data + " days";
+      });
+
+      // Fetch Vendo Status
+      const status = ref(db, "Vendo_Status");
+      let vendostatus = document.getElementById("vendo_status");
+      onValue(status, (snapshot) => {
+        const data = snapshot.val();
+        console.log(data);
+        if (data) {
+          vendo_status.textContent = "Enabled";
+          vendo_status.classList.remove("bg-danger");
+          vendo_status.classList.add("bg-success");
+        } else {
+          vendo_status.textContent = "Disabled";
+          vendo_status.classList.remove("bg-success");
+          vendo_status.classList.add("bg-danger");
+        }
+      });
+
+      const emailsRef = ref(db, "Emails");
+      // ADD EMAIL
+      addEmail.addEventListener("click", (e) => {
+        const newEmailsRef = push(emailsRef);
+        let nameInput = document.getElementById("nameInput");
+        let emailInput = document.getElementById("emailInput");
+        let tableRows = document.getElementById("emailsTable").rows.length;
+        let emailValue = emailInput.value;
+        if (nameInput.value != "" && emailInput.value != "" && tableRows < 4) {
+          if (!emailValue.endsWith("@gmail.com")) {
+            emailValue += "@gmail.com";
+          }
+
+          set(newEmailsRef, {
+            Name: nameInput.value,
+            Email: emailValue,
+          })
+            .then(() => {
+              errorEmail.classList.add("hidden");
+              nameInput.value = "";
+              emailInput.value = "";
+            })
+            .catch((error) => {
+              errorEmail.innerHTML = "Adding failed:" + error;
+              errorEmail.classList.remove("hidden");
+            });
+        }
+      });
+      function deleteEmail(id) {
+        // let tableRows = document.getElementById("emailsTable").rows.length;
+        // if (tableRows > 2) {
+        const itemRef = ref(db, "Emails/" + id);
+        remove(itemRef);
+        // }
+      }
+      // Fetch EMAILS
+      onValue(emailsRef, (snapshot) => {
+        const table = document.getElementById("emailsTable");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        while (tbody.firstChild) {
+          tbody.removeChild(tbody.firstChild);
+        }
+        snapshot.forEach((childSnapshot) => {
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          var table = document
+            .getElementById("emailsTable")
+            .getElementsByTagName("tbody")[0];
+          var row = table.insertRow(table.rows.length);
+          var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          cell1.innerHTML = childData.Name;
+          cell2.innerHTML = childData.Email;
+          var deleteButton = document.createElement("button");
+          deleteButton.className = "btn btn-danger";
+          deleteButton.textContent = "delete";
+          deleteButton.addEventListener("click", function () {
+            deleteEmail(childKey);
+          });
+
+          cell3.appendChild(deleteButton);
+        });
+      });
+
+      btnChangePass.addEventListener("click", () => {
+        const oldPasswordRef = ref(db, "Password");
+        let oldPassword = "";
+        onValue(oldPasswordRef, (snapshot) => {
+          const data = snapshot.val();
+          oldPassword = data;
+        });
+        var currentPassword = document.getElementById("currentPassword");
+        var newPassword = document.getElementById("newPassword");
+
+        if (newPassword.value != "" && currentPassword.value != "") {
+          if (oldPassword === currentPassword.value) {
+            if (newPassword.value === currentPassword.value) {
+              alert(
+                "New password should not be the same as the current password."
+              );
+              return;
+            }
+
+            // Check basic password security requirements
+            var passwordRegex =
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+            if (!passwordRegex.test(newPassword.value)) {
+              alert(
+                "Password must contain at least 8 characters, one uppercase letter, and one number."
+              );
+              return;
+            }
+
+            set(ref(db, "Password"), newPassword.value)
+              .then(() => {
+                currentPassword.value = "";
+                newPassword.value = "";
+                alert("Password successfully Updated.");
+              })
+              .catch((error) => {
+                // The write failed...
+              });
+          } else {
+            alert("Wrong Password, Try again.");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

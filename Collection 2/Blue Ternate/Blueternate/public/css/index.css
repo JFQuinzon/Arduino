@@ -1,0 +1,14 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("https://images.pexels.com/photos/4040649/pexels-photo-4040649.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: darken;
+  background-color: rgba(0, 0, 0, 0.137);
+  font-family: "Poppins";
+}
+.header-text {
+  font-family: "Poppins" !important;
+  color: #005096 !important;
+}

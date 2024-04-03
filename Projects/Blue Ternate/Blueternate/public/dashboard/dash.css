@@ -1,0 +1,40 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("https://images.pexels.com/photos/4040649/pexels-photo-4040649.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: darken;
+  background-color: rgba(0, 0, 0, 0.137);
+  font-family: "Poppins" !important;
+}
+.header-text {
+  font-family: "Poppins" !important;
+  color: #005096 !important;
+}
+
+.box {
+  background-color: white;
+  border-radius: 20px;
+}
+
+.checkerr {
+  margin-left: -1.3em !important;
+}
+.log_out {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: white;
+  columns: black;
+  font-size: 1.2rem;
+  border: 2px solid black;
+}
+.table-container {
+  height: 300px; /* Adjust the height as needed */
+  overflow-y: auto; /* Add a vertical scrollbar if needed */
+}
+.hidden {
+  display: none;
+  color: red;
+}

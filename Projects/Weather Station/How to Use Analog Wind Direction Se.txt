@@ -1,0 +1,5 @@
+How to Use Analog Wind Direction Sensor with Arduino
+https://www.youtube.com/watch?v=fl7YmycQckI
+
+Wind Speed Meter with Anemometer with NPN Pulse Output & Arduino
+https://www.youtube.com/watch?v=Ax2Oe5eBjow&t=132s
