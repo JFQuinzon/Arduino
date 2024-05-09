@@ -145,10 +145,10 @@ void setTime(){
   lcd.print(minutes);
 
   if (minusButtonState == 0 && minutes != 0) {
-    minutes = minutes - 1;
+    minutes = minutes - 5;
     lastButtonPress = millis();
   }else if (plusButtonState == 0){
-    minutes = minutes + 1;
+    minutes = minutes + 5;
     lastButtonPress = millis();
   }else if (saveButtonState == 0 && minutes != 0){
     lcd.clear();
@@ -290,7 +290,7 @@ void changeMode(){
 }
 
 void loadTime(){
-    RtcDateTime currentTime = RtcDateTime(__DATE__, __TIME__);
+  RtcDateTime currentTime = RtcDateTime(__DATE__, __TIME__);
   if (!Rtc.IsDateTimeValid()){
     Serial.println("RTC lost confidence in the DateTime!");
     Rtc.SetDateTime(currentTime);
